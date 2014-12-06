@@ -1,0 +1,13 @@
+Django>=1.5.4,<1.7
+MySQL-python
+distribute>=0.7.3
+South
+django-debug-toolbar
+django-model-utils
+django-admin-tools
+django-storages
+gunicorn
+python-dateutil
+celery
+django-tastypie
+fabric
