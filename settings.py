@@ -179,6 +179,9 @@ INTERNAL_IPS = ('127.0.0.1',)
 # Site settings
 DEFAULT_SITE_NAME = 'Common Drive'
 
+DROPBOX_APP_KEY = '1ycz2g5iuigero1'
+DROPBOX_SECRET_KEY = '7j47tawp12fh8mc'
+
 # Import logger settings
 from logger_settings import *
 
