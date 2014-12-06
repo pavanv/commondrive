@@ -11,3 +11,5 @@ python-dateutil
 celery
 django-tastypie
 fabric
+django-sekizai
+django-allauth
