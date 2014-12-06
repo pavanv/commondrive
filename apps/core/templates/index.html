@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load sekizai_tags %}
+{% load cd_tags %}
+
+{% block content %}
+
+    <div id="AH_PageContainer">
+        {% block container %}
+        Hello World!
+        {% endblock container %}
+    </div>
+
+    {% prependtoblock "js" %}
+    {% endprependtoblock "js" %}
+
+{% endblock content %}
