@@ -1,0 +1,90 @@
+<script id="LoginTmpl" type="text/html">
+
+<div class="col-md-offset-3">
+    <div class="content outline" style="padding:0">
+        <div class="col-md-12 col-sm-12 col-xs-12" style="display:block">
+            <h3 class="form-title">Login to your Account</h3>
+            <!-- BEGIN LOGIN FORM -->
+            <form class="login-form" action="#" method="post" style="background-color:#fff;">
+                <div class="form-group">
+                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                    <label class="control-label visible-ie8 visible-ie9">Email</label>
+                    <div class="input-icon">
+                        <i class="fa fa-envelope"></i>
+                        <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email" value="<%= email %>" style="width:300px" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">Password</label>
+                    <div class="input-icon">
+                        <i class="fa fa-lock"></i>
+                        <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password" value="<%= password %>" style="width:300px" />
+                    </div>
+                </div>
+                <div class="" style="border:0;padding:0">
+                    <div class="col-md-6" style="padding:0">
+                        <button type="submit" class="col-md-8 col-sm-12 col-xs-12 btn green" id="LoginBtn" style="width:300px">
+                            Login
+                        </button>
+                        <br>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-5 col-xs-5" style="padding-top:3%;padding-left:0">
+                    <p>
+                        <a href="#signup"><i class="fa fa-long-arrow-left"></i> Singup if you don&rsquo;t have an account</a>
+                    </p>
+                </div>
+            </form>
+            <!-- END LOGIN FORM -->
+        </div>
+    </div>
+</div>
+
+</script>
+
+<script id="SignupTmpl" type="text/html">
+
+<div class="col-md-offset-3">
+    <div class="content outline">
+    <!-- BEGIN LOGIN FORM -->
+    <form class="login-form" action="#" method="post" style="margin-bottom:2%;background-color:#fff">
+        <h3 class="form-title">SignUp</h3>
+
+        <div class="form-group">
+            <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+            <label class="control-label visible-ie8 visible-ie9">Email</label>
+            <div class="input-icon">
+                <i class="fa fa-envelope"></i>
+                <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Email" name="email" value="<%= email %>" style="width:300px"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Password</label>
+            <div class="input-icon">
+                <i class="fa fa-lock"></i>
+                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Password" name="password1" value="<%= password1 %>" style="width:300px"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label visible-ie8 visible-ie9">Confirm Password</label>
+            <div class="input-icon">
+                <i class="fa fa-lock"></i>
+                <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="Confirm Password" name="password2" value="<%= password2 %>" style="width:300px"/>
+            </div>
+        </div>
+        <div style="padding:0">
+            <p>
+                <button type="submit" class="col-md-4 col-sm-12 col-xs-12 btn green" id="SignupBtn" style="width:300px">Create My Account</button>
+            </p>
+        </div>
+        <div class="col-md-12 col-sm-5 col-xs-5" style="padding-top:3%;padding-left:0">
+            <p>
+                <a href="#login"><i class="fa fa-long-arrow-left"></i> Login if you already have an account</a>
+            </p>
+        </div>
+    </form>
+    <!-- END LOGIN FORM -->
+    </div>
+</div>
+
+</script>

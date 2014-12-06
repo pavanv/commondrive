@@ -28,6 +28,41 @@ CD.log = function() {
     }
 };
 
+CD.views.BaseView = Backbone.Layout.extend({
+    cleanup: function() {
+        this.removeView();
+    }
+});
+
+CD.views.UserDropdownView = CD.views.BaseView.extend({
+
+    template: _.template($('#UserDropdownTmpl').html()),
+
+    events: {
+        'click #AH_UserProfile': 'onUserProfile'
+    },
+
+    initialize: function() {
+        this.listenTo(this.model, 'change', this.render);
+    },
+
+    serialize: function() {
+        return {
+            user: this.model
+        };
+    },
+
+    onUserProfile: function(evt) {
+        CD.log('User clicked on User Profile');
+        evt.preventDefault();
+        CD.globals.router.navigate('user_profile', {
+            trigger: true
+        });
+        return this;
+    }
+
+});
+
 Date.prototype.toServerFormat = function() {
     return this.toString('yyyy-MM-ddTHH:mm:ss');
 };
