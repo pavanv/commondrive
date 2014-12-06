@@ -55,6 +55,9 @@ class UserResource(ApiResource):
             url(r'^(?P<resource_name>%s)/logout%s$' %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('logout'), name='api_logout'),
+            url(r'^(?P<resource_name>%s)/profile%s$' %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('profile'), name='profile'),
         ]
 
     def login(self, request, **kwargs):
@@ -143,6 +146,19 @@ class UserResource(ApiResource):
             return self.create_response(request, {'success': True})
         else:
             return self.create_response(request, {'success': False}, HttpUnauthorized)
+
+    def profile(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        if not request.user.is_authenticated():
+            return self.create_response(request, {}, HttpUnauthorized)
+
+        return self.create_response(request, {
+            'id': request.user.id,
+            'resource_uri': self.get_resource_uri(request.user),
+            'email': request.user.email,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+        })
 
 
 class ContainerResource(ApiResource):

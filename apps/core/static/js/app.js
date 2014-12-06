@@ -38,14 +38,7 @@ CD.functions.fetchUser = function() {
         success: function(model) {
             CD.log('Success in getting user');
             Backbone.Tastypie.csrfToken = $.cookie('csrftoken');
-            CD.functions.getUserOrganizations();
-            CD.functions.getUserProjects();
-            CD.functions.getStarredForms();
-            CD.functions.getAllForms();
-            //CD.functions.loadPageContent();
-            CD.functions.loadSidebar();
             CD.functions.loadUserDropdown();
-            CD.functions.loadSearchBar();
         },
         error: function() {
             CD.log('Error in getting user');
@@ -70,6 +63,13 @@ CD.functions.fetchUserProfile = function() {
     });
 };
 
+CD.functions.loadUserDropdown = function() {
+    CD.globals.userDropdown = new CD.views.UserDropdownView({
+        el: "#AH_UserDropdown",
+        model: CD.globals.user
+    }).render();
+};
+
 CD.functions.routeToContainer = function(container) {
     CD.globals.router.navigate('c/' + container.get('id'), {
         trigger: true
@@ -80,12 +80,6 @@ CD.functions.routeToObject = function(object) {
     CD.globals.router.navigate('o/' + object.get('id'), {
         trigger: true
     });
-};
-
-CD.functions.loadPageContent = function() {
-    CD.globals.pageContent = new CD.views.PageContentView({
-        el: "#AH_PageContent"
-    }).render();
 };
 
 CD.functions.activateSpinner = function() {

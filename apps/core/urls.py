@@ -13,5 +13,5 @@ v1_api.register(api.IndexerResource())
 urlpatterns = patterns(
     '',
     url(r'^$', views.HomeView.as_view()),
-    url(r'^', include(v1_api.urls)),
+    url(r'^api/', include(v1_api.urls)),
 )

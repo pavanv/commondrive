@@ -25,5 +25,6 @@ if settings.DEBUG:
 urlpatterns += patterns(
     '',
     url(r'^', include('apps.core.urls')),
+    url(r'^accounts/', include('allauth.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
