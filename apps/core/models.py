@@ -10,6 +10,8 @@ import logging
 #from django.db.models import F
 from django.contrib.auth.models import User
 import settings
+import dropbox
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -63,10 +65,16 @@ class Object(TimeStampedModel):
         max_length=30,
         choices=OBJECT_TYPES,
     )
-    size = models.PositiveIntegerField()
+    bytes = models.PositiveIntegerField()
+    hash = models.CharField(max_length=100)
+
+    @property
+    def fullpath(self):
+        parentpath = self.parent.fullpath() if self.parent else '/'
+        return os.path.join(parentpath, self.name.encode('utf-8'))
 
     def __unicode__(self):
-        return u'{}'.format(self.name)
+        return u'{}'.format(self.name.encode('utf-8'))
 
 
 class Indexer(TimeStampedModel):
@@ -78,6 +86,35 @@ class Indexer(TimeStampedModel):
 
     def __unicode__(self):
         return u'{}-{}'.format(self.container, self.status)
+
+    def index_dropbox(self):
+        client = dropbox.client.DropboxClient(self.container.dropbox_access_token)
+        logger.debug('linked account: {}'.format(client.account_info()))
+        directories = [('/', None)]
+        while directories:
+            dirname, parent = directories.pop(0)
+            metadata = client.metadata(dirname)
+            dirobj = Object.objects.create(
+                container=self.container,
+                parent=parent,
+                name=os.path.split(dirname)[-1],
+                type=OBJECT_TYPES.directory,
+                bytes=metadata.get('bytes', 0),
+                hash=metadata['hash']
+            )
+            for obj in metadata['contents']:
+                logger.debug('obj: {} size={} is_dir={}'.format(obj['path'].encode('utf-8'), obj['bytes'], obj['is_dir']))
+                if obj['is_dir']:
+                    directories.append((obj['path'], dirobj))
+                else:
+                    dirobj = Object.objects.create(
+                        container=self.container,
+                        parent=dirobj,
+                        name=os.path.split(obj['path'])[-1],
+                        type=OBJECT_TYPES.file,
+                        bytes=obj.get('bytes', 0),
+                        hash=obj.get('hash', '')
+                    )
 
 #############################################################################
 # Create our own test user automatically.

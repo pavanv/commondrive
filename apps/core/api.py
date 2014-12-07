@@ -237,6 +237,7 @@ class ContainerResource(ApiResource):
 
 class ObjectResource(ApiResource):
     container = fields.ForeignKey(ContainerResource, 'container', full=True)
+    fullpath = fields.CharField(attribute='fullpath')
 
     class Meta:
         queryset = models.Object.objects.all()

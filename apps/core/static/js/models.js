@@ -96,7 +96,9 @@ CD.models.SignupUser = CD.models.BaseModel.extend({
 
 CD.models.Container = CD.models.BaseModel.extend({
 
-    urlRoot: '/api/1/container/',
+    urlRoot: function() {
+        return '/api/1/container/?user=' + CD.globals.user.get('id');
+    },
 
     validation: {
         name: {

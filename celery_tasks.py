@@ -7,15 +7,20 @@ topdir = os.path.dirname(os.path.abspath(__file__))
 os.sys.path.insert(0, topdir)
 #print 'topdir={0}'.format(topdir)
 
+from apps.core import models
+
 logger = logging.getLogger(__name__)
 
 app = Celery('celery_tasks')
 
 
 @shared_task
-def index(indexer_obj):
+def index(obj):
     logger.debug('Indexing container={} user={} {}'.format(
-        indexer_obj.container, indexer_obj.container.user.email,
-        indexer_obj.container.__dict__, indexer_obj.__dict__
+        obj.container, obj.container.user.email,
+        obj.container.__dict__, obj.__dict__
     ))
-    pass
+    functions = {
+        models.STORAGE_TYPES.dropbox: obj.index_dropbox
+    }
+    return functions[obj.container.storage_type]()

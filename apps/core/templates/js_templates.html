@@ -113,13 +113,30 @@
 </script>
 
 <script type="text/html" id="DashboardTmpl">
+<div class="row">
+    <h3>Containers</h3>
+    <hr>
+    <button class="btn btn-primary" id="AH_AddStorage">Add Storage</button>
 
-<button class="btn btn-primary" id="AH_AddStorage">Add Storage</button>
+    <div class="AH_AddStorageView hidden">
+        <button class="btn btn-primary AH_Submit">Submit</button>
+        <button class="btn AH_Cancel">Cancel</button>
+    </div>
 
-<div class="AH_AddStorageView hidden">
-    <button class="btn btn-primary AH_Submit">Submit</button>
-    <button class="btn AH_Cancel">Cancel</button>
+    <table id="AH_Containers" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Storage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% containers.each(function(container) { %>
+                <td><%= container.get('name') %></td>
+                <td><%= container.get('storage_type') %></td>
+            <% }) %>
+        </tbody>
+    </table>
 </div>
-
 </script>
 

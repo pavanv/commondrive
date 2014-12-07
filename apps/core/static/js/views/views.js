@@ -50,6 +50,19 @@ CD.views.DashboardView = CD.views.BaseView.extend({
         'click .AH_AddStorageView .AH_Cancel': 'onAddStorageCancel',
     },
 
+    initialize: function() {
+        this.containers = new CD.collections.Containers();
+        this.containers.fetch({
+            async: false
+        });
+    },
+
+    serialize: function() {
+        return {
+            containers: this.containers
+        };
+    },
+
     onAddStorageBtn: function() {
         CD.log('Add Storage button click');
 
