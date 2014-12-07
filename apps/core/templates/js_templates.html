@@ -154,5 +154,17 @@
 <div class="row">
     <h3><%= fullpath %></h3>
     <hr>
+    <ul id="AH_Children">
+    </ul>
 </div>
+</script>
+
+<script type="text/html" id="ObjectEntryTmpl">
+    <% if (type == 'directory') { %>
+        <a class="AH_ViewDirectory">
+            <%= name %>
+        </a>
+    <% } else { %>
+        <%= name %>
+    <% } %>
 </script>

@@ -8,6 +8,7 @@
 
 /* global _ */
 /* global $ */
+/* global Backbone */
 
 /* global CD */
 
@@ -152,21 +153,39 @@ CD.views.ObjectView = CD.views.BaseView.extend({
 
     template: _.template($('#ObjectTmpl').html()),
 
-    events: {
-        'click .AH_ViewDirectory': 'onViewDirectory',
-    },
-
     initialize: function(options) {
-        this.model = new CD.models.Object({
-            id: options.id
+        this.model = CD.models.Object.findOrCreate({
+            resource_uri: '/api/1/object/' + options.id + '/'
         });
         this.model.fetch({
             async: false
         });
     },
 
+    beforeRender: function() {
+        var view = this;
+        _.each(this.model.get('children'), function(obj) {
+            view.insertView('#AH_Children', new CD.views.ObjectEntryView({
+                model: new Backbone.Model(obj)
+            }));
+        });
+    },
+
+});
+
+CD.views.ObjectEntryView = CD.views.BaseView.extend({
+
+    tagName: 'li',
+
+    template: _.template($('#ObjectEntryTmpl').html()),
+
+    events: {
+        'click .AH_ViewDirectory': 'onViewDirectory',
+    },
+
     onViewDirectory: function() {
         CD.log('View called on directory');
+        CD.functions.routeToObject(this.model);
         return this;
     },
 

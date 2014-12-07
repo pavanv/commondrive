@@ -132,6 +132,16 @@ CD.models.Object = CD.models.BaseModel.extend({
 
     urlRoot: '/api/1/object/',
 
+    /*    relations: [{
+            type: Backbone.HasMany,
+            key: 'children',
+            relatedModel: 'CD.models.Object',
+            collectionType: 'CD.collections.Objects',
+            includeInJSON: false,
+            autoFetch: false,
+            reverseRelation: false,
+        }],*/
+
 });
 
 CD.collections.Objects = Backbone.Collection.extend({

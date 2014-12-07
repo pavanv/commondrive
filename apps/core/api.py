@@ -237,6 +237,7 @@ class ObjectResource(ApiResource):
     container = fields.ForeignKey(ContainerResource, 'container')
     parent = fields.ForeignKey('apps.core.api.ObjectResource', 'parent', null=True)
     fullpath = fields.CharField(attribute='fullpath')
+    children = fields.ListField(attribute='children', null=True, readonly=True)
 
     class Meta:
         queryset = models.Object.objects.all()
@@ -248,16 +249,3 @@ class ObjectResource(ApiResource):
             'container': ALL_WITH_RELATIONS,
             'parent': ALL_WITH_RELATIONS,
         }
-
-    def add_dropbox(self, request, **kwargs):
-        self.method_check(request, allowed=['get'])
-        if not request.user.is_authenticated():
-            return self.create_response(request, {}, HttpUnauthorized)
-
-        return self.create_response(request, {
-            'id': request.user.id,
-            'resource_uri': self.get_resource_uri(request.user),
-            'email': request.user.email,
-            'first_name': request.user.first_name,
-            'last_name': request.user.last_name,
-        })

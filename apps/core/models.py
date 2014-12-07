@@ -119,6 +119,11 @@ class Object(TimeStampedModel):
         parentpath = self.parent.fullpath if self.parent else '/'
         return os.path.join(parentpath, self.name.encode('utf-8'))
 
+    @property
+    def children(self):
+        objs = Object.objects.filter(parent=self).values('id', 'name', 'type', 'bytes')
+        return objs
+
     def __unicode__(self):
         return u'{}'.format(self.name.encode('utf-8'))
 

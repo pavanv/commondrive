@@ -51,10 +51,8 @@ CD.Router = Backbone.Router.extend({
     },
 
     cleanupCurrentView: function() {
-        CD.log('In cleanupCurrentView');
-
         if (this.currentView) {
-            CD.log('cleaning up view ' + this.currentView.cid);
+            CD.log('Cleaning up view ' + this.currentView.cid);
             if (_.isFunction(this.currentView.cleanup)) {
                 this.currentView.cleanup();
             }
