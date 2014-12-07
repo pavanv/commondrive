@@ -18,6 +18,11 @@ from allauth.account.utils import complete_signup
 from allauth.account import app_settings
 from django.conf import settings
 from django.contrib.auth.models import User
+from django import http
+from dropbox.client import DropboxOAuth2Flow
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 ##############################################################################
@@ -174,6 +179,44 @@ class ContainerResource(ApiResource):
             'user': ALL_WITH_RELATIONS,
         }
 
+    def prepend_urls(self):
+        return [
+            url(r'^(?P<resource_name>%s)/add/dropbox%s$' %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('add_dropbox'), name='add_dropbox'),
+            url(r'^(?P<resource_name>%s)/add/dropbox/done%s$' %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('add_dropbox_done'), name='add_dropbox_done'),
+        ]
+
+    @staticmethod
+    def get_dropbox_auth_flow(request):
+        redirect_uri = 'http://' + request.get_host() + '/api/1/container/add/dropbox/done/'
+        return DropboxOAuth2Flow(
+            settings.DROPBOX_APP_KEY, settings.DROPBOX_SECRET_KEY,
+            redirect_uri, request.session, "dropbox-auth-csrf-token"
+        )
+
+    def add_dropbox(self, request, **kwargs):
+        if not request.user.is_authenticated():
+            return self.create_response(request, {}, HttpUnauthorized)
+
+        dropbox_uri = self.get_dropbox_auth_flow(request).start()
+        return self.create_response(request, {'redirect': dropbox_uri})
+
+    def add_dropbox_done(self, request, **kwargs):
+        if not request.user.is_authenticated():
+            return self.create_response(request, {}, HttpUnauthorized)
+        try:
+            access_token, user_id, url_state = self.get_dropbox_auth_flow(request).finish(request.GET)
+        except:
+            logger.debug('Error getting Dropbox return params')
+            return http.HttpResponseRedirect('/')
+
+        logger.debug('{} {} {}'.format(access_token, user_id, url_state))
+
+        return http.HttpResponseRedirect('/')
+
 
 class ObjectResource(ApiResource):
     container = fields.ForeignKey(ContainerResource, 'container', full=True)
@@ -187,6 +230,19 @@ class ObjectResource(ApiResource):
         filtering = {
             'container': ALL_WITH_RELATIONS,
         }
+
+    def add_dropbox(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        if not request.user.is_authenticated():
+            return self.create_response(request, {}, HttpUnauthorized)
+
+        return self.create_response(request, {
+            'id': request.user.id,
+            'resource_uri': self.get_resource_uri(request.user),
+            'email': request.user.email,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+        })
 
 
 class IndexerResource(ApiResource):

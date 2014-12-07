@@ -60,6 +60,20 @@ CD.views.DashboardView = CD.views.BaseView.extend({
 
     onAddStorageSubmit: function() {
         CD.log('Add Storage Submit handler');
+        $.ajax({
+            url: '/api/1/container/add/dropbox/',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function(data) {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                }
+            },
+            error: function() {
+                BootstrapDialog.alert('Error adding Dropbox account');
+            }
+        });
         return this;
     },
 
