@@ -44,4 +44,29 @@ CD.views.DashboardView = CD.views.BaseView.extend({
 
     template: _.template($('#DashboardTmpl').html()),
 
+    events: {
+        'click #AH_AddStorage': 'onAddStorageBtn',
+        'click .AH_AddStorageView .AH_Submit': 'onAddStorageSubmit',
+        'click .AH_AddStorageView .AH_Cancel': 'onAddStorageCancel',
+    },
+
+    onAddStorageBtn: function() {
+        CD.log('Add Storage button click');
+
+        this.$('#AH_AddStorage').toggleClass('hidden');
+        this.$('.AH_AddStorageView').toggleClass('hidden');
+        return this;
+    },
+
+    onAddStorageSubmit: function() {
+        CD.log('Add Storage Submit handler');
+        return this;
+    },
+
+    onAddStorageCancel: function() {
+        CD.log('Add Storage Cancel handler');
+        this.$('#AH_AddStorage').toggleClass('hidden');
+        this.$('.AH_AddStorageView').toggleClass('hidden');
+    },
+
 });
