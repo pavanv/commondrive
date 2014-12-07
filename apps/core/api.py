@@ -169,6 +169,7 @@ class UserResource(ApiResource):
 
 class ContainerResource(ApiResource):
     user = fields.ForeignKey(UserResource, 'user', full=True)
+    root = fields.ForeignKey('apps.core.api.ObjectResource', 'root', null=True, full=True)
 
     class Meta:
         queryset = models.Container.objects.all()
@@ -222,21 +223,19 @@ class ContainerResource(ApiResource):
                 'storage_type': models.STORAGE_TYPES.dropbox,
                 'name': 'Dropbox',
                 'dropbox_access_token': access_token,
+                'status': models.INDEXING_STATUS.pending,
             }
         )
 
         if created:
-            indexer = models.Indexer.objects.create(
-                container=container,
-                status=models.INDEXING_STATUS.pending
-            )
-            celery_tasks.index(indexer)
+            celery_tasks.index(container)
 
         return http.HttpResponseRedirect('/')
 
 
 class ObjectResource(ApiResource):
-    container = fields.ForeignKey(ContainerResource, 'container', full=True)
+    container = fields.ForeignKey(ContainerResource, 'container')
+    parent = fields.ForeignKey('apps.core.api.ObjectResource', 'parent', null=True)
     fullpath = fields.CharField(attribute='fullpath')
 
     class Meta:
@@ -247,6 +246,7 @@ class ObjectResource(ApiResource):
 
         filtering = {
             'container': ALL_WITH_RELATIONS,
+            'parent': ALL_WITH_RELATIONS,
         }
 
     def add_dropbox(self, request, **kwargs):
@@ -261,17 +261,3 @@ class ObjectResource(ApiResource):
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
         })
-
-
-class IndexerResource(ApiResource):
-    container = fields.ForeignKey(ContainerResource, 'container', full=True)
-
-    class Meta:
-        queryset = models.Indexer.objects.all()
-        authentication = SessionAuthentication()
-        authorization = Authorization()
-        always_return_data = True
-
-        filtering = {
-            'container': ALL_WITH_RELATIONS,
-        }

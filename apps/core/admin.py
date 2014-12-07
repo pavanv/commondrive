@@ -15,7 +15,7 @@ ff = foreign_field
 
 
 class ContainerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'storage_type', ff('user__email'),
+    list_display = ('id', 'name', 'storage_type', ff('user__email'), 'status',
                     'dropbox_access_token', 'dropbox_user_id')
     search_fields = ['^name', '^user__email']
 
@@ -25,11 +25,5 @@ class ObjectAdmin(admin.ModelAdmin):
     search_fields = ['^name', '^container__name']
 
 
-class IndexerAdmin(admin.ModelAdmin):
-    list_display = ('id', ff('container__name'), ff('container__storage_type'), 'status')
-    search_fields = ['^status', '^container__name', '^container__storage_type']
-
-
 admin.site.register(models.Container, ContainerAdmin)
 admin.site.register(models.Object, ObjectAdmin)
-admin.site.register(models.Indexer, IndexerAdmin)

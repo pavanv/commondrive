@@ -16,11 +16,10 @@ app = Celery('celery_tasks')
 
 @shared_task
 def index(obj):
-    logger.debug('Indexing container={} user={} {}'.format(
-        obj.container, obj.container.user.email,
-        obj.container.__dict__, obj.__dict__
+    logger.debug('Indexing container={} user={}'.format(
+        obj, obj.user.email, obj.__dict__
     ))
     functions = {
         models.STORAGE_TYPES.dropbox: obj.index_dropbox
     }
-    return functions[obj.container.storage_type]()
+    return functions[obj.storage_type]()

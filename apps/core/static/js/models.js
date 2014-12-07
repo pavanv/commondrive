@@ -108,16 +108,12 @@ CD.models.Container = CD.models.BaseModel.extend({
     },
 
     relations: [{
-        type: Backbone.HasMany,
-        key: 'objects',
+        type: Backbone.HasOne,
+        key: 'root',
         relatedModel: 'CD.models.Object',
-        collectionType: 'CD.collections.Objects',
         includeInJSON: false,
         autoFetch: false,
-        reverseRelation: {
-            key: 'container',
-            includeInJSON: 'resource_uri'
-        }
+        reverseRelation: false,
     }],
 
 });

@@ -3,7 +3,7 @@
 /* jshint -W097 */
 
 /* global alert */
-/* global console */
+/* global window */
 /* global BootstrapDialog */
 
 /* global _ */
@@ -63,6 +63,15 @@ CD.views.DashboardView = CD.views.BaseView.extend({
         };
     },
 
+    beforeRender: function() {
+        var view = this;
+        this.containers.each(function(container) {
+            view.insertView('#AH_Containers tbody', new CD.views.ContainerView({
+                model: container
+            }));
+        });
+    },
+
     onAddStorageBtn: function() {
         CD.log('Add Storage button click');
 
@@ -94,6 +103,71 @@ CD.views.DashboardView = CD.views.BaseView.extend({
         CD.log('Add Storage Cancel handler');
         this.$('#AH_AddStorage').toggleClass('hidden');
         this.$('.AH_AddStorageView').toggleClass('hidden');
+        return this;
+    },
+
+});
+
+CD.views.ContainerView = CD.views.BaseView.extend({
+
+    tagName: 'tr',
+
+    template: _.template($('#ContainerTmpl').html()),
+
+    initialize: function() {
+        this.listenTo(this.model, 'delete', this.remove);
+    },
+
+    events: {
+        'click .AH_View': 'onView',
+        'click .AH_Index': 'onIndex',
+        'click .AH_Watch': 'onWatch',
+        'click .AH_Delete': 'onDelete',
+    },
+
+    onView: function() {
+        CD.log('View called on container');
+        CD.functions.routeToObject(this.model.get('root'));
+        return this;
+    },
+
+    onIndex: function() {
+        CD.log('Index called on container');
+        return this;
+    },
+
+    onWatch: function() {
+        CD.log('Watch called on container');
+        return this;
+    },
+
+    onDelete: function() {
+        CD.log('Delete called on container');
+        return this;
+    },
+
+});
+
+CD.views.ObjectView = CD.views.BaseView.extend({
+
+    template: _.template($('#ObjectTmpl').html()),
+
+    events: {
+        'click .AH_ViewDirectory': 'onViewDirectory',
+    },
+
+    initialize: function(options) {
+        this.model = new CD.models.Object({
+            id: options.id
+        });
+        this.model.fetch({
+            async: false
+        });
+    },
+
+    onViewDirectory: function() {
+        CD.log('View called on directory');
+        return this;
     },
 
 });

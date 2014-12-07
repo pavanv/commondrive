@@ -128,15 +128,31 @@
             <tr>
                 <th>Name</th>
                 <th>Storage</th>
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <% containers.each(function(container) { %>
-                <td><%= container.get('name') %></td>
-                <td><%= container.get('storage_type') %></td>
-            <% }) %>
         </tbody>
     </table>
 </div>
 </script>
 
+<script type="text/html" id="ContainerTmpl">
+    <td><%= name %></td>
+    <td><%= storage_type %></td>
+    <td><%= status %></td>
+    <td>
+        <button class="btn mini btn-primary AH_View">View</button>
+        <button class="btn mini AH_Index" disabled="disabled">Update Index</button>
+        <button class="btn mini AH_Watch" disabled="disabled">Watch</button>
+        <button class="btn mini red AH_Delete">Delete</button>
+    </td>
+</script>
+
+<script type="text/html" id="ObjectTmpl">
+<div class="row">
+    <h3><%= fullpath %></h3>
+    <hr>
+</div>
+</script>
