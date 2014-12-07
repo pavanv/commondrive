@@ -48,6 +48,8 @@ class Container(TimeStampedModel):
         choices=STORAGE_TYPES,
     )
     name = models.CharField(max_length=100)
+    dropbox_access_token = models.CharField(max_length=500, blank=True)
+    dropbox_user_id = models.CharField(max_length=30, blank=True)
 
     def __unicode__(self):
         return u'{}'.format(self.name)

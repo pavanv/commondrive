@@ -15,7 +15,8 @@ ff = foreign_field
 
 
 class ContainerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'storage_type', ff('user__email'))
+    list_display = ('id', 'name', 'storage_type', ff('user__email'),
+                    'dropbox_access_token', 'dropbox_user_id')
     search_fields = ['^name', '^user__email']
 
 

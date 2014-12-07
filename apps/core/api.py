@@ -214,6 +214,15 @@ class ContainerResource(ApiResource):
             return http.HttpResponseRedirect('/')
 
         logger.debug('{} {} {}'.format(access_token, user_id, url_state))
+        models.Container.objects.get_or_create(
+            dropbox_user_id=user_id,
+            defaults={
+                'user': request.user,
+                'storage_type': models.STORAGE_TYPES.dropbox,
+                'name': 'Dropbox',
+                'dropbox_access_token': access_token,
+            }
+        )
 
         return http.HttpResponseRedirect('/')
 
