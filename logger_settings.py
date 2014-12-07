@@ -42,5 +42,10 @@ LOGGING = {
             'level': 'DEBUG' if settings.DEBUG else 'INFO',
             'propagate': True,
         },
+        'celery_tasks': {
+            'handlers': ['default'],
+            'level': 'DEBUG' if settings.DEBUG else 'INFO',
+            'propagate': True,
+        },
     }
 }

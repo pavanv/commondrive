@@ -21,6 +21,7 @@ from django.contrib.auth.models import User
 from django import http
 from dropbox.client import DropboxOAuth2Flow
 import logging
+import celery_tasks
 
 logger = logging.getLogger(__name__)
 
@@ -214,7 +215,7 @@ class ContainerResource(ApiResource):
             return http.HttpResponseRedirect('/')
 
         logger.debug('{} {} {}'.format(access_token, user_id, url_state))
-        models.Container.objects.get_or_create(
+        container, created = models.Container.objects.get_or_create(
             dropbox_user_id=user_id,
             defaults={
                 'user': request.user,
@@ -223,6 +224,13 @@ class ContainerResource(ApiResource):
                 'dropbox_access_token': access_token,
             }
         )
+
+        if created:
+            indexer = models.Indexer.objects.create(
+                container=container,
+                status=models.INDEXING_STATUS.pending
+            )
+            celery_tasks.index(indexer)
 
         return http.HttpResponseRedirect('/')
 
